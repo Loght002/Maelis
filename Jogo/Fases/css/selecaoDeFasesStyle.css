@@ -1,0 +1,116 @@
+body {
+    background-color: #000010;
+    color: white;
+    font-family: 'Press Start 2P', cursive;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    text-transform: uppercase;
+    /* Adicionado para garantir que o layout se ajuste bem */
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.container-selecao {
+    text-align: center;
+    width: 100%; /* Ocupa a largura total disponível */
+    max-width: 700px; /* Limita a largura máxima em telas grandes */
+}
+
+h1 {
+    /* Fonte fluida com clamp(min, ideal, max) */
+    font-size: clamp(1.8em, 5vw, 2.5em); 
+    color: #FFFF00;
+    text-shadow: 0 0 8px #FFFF00, 0 0 12px #ffc400;
+    margin-bottom: 60px;
+}
+
+.botao-fase {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    /* LARGURA RESPONSIVA */
+    width: 90%; /* Ocupa 90% do container pai */
+    max-width: 450px; /* Limita o tamanho máximo do botão */
+    min-height: 100px; /* Altura mínima para não ficar muito achatado */
+
+    padding: 20px;
+    margin: 30px auto;
+    background: transparent;
+    color: #FF00FF;
+    text-decoration: none;
+    
+    /* FONTE RESPONSIVA */
+    font-size: clamp(1.2em, 4vw, 1.8em);
+    
+    border: 4px solid #8B008B;
+    border-radius: 10px;
+    transition: all 0.2s ease-in-out;
+    text-shadow: 0 0 5px #FF00FF;
+    box-shadow: inset 0 0 15px rgba(139, 0, 139, 0.6), 0 0 15px rgba(139, 0, 139, 0.4);
+}
+
+.botao-fase:hover {
+    color: #FFFFFF;
+    background-color: #8B008B;
+    text-shadow: 0 0 10px #FFFFFF;
+    box-shadow: inset 0 0 20px rgba(255, 0, 255, 0.8), 0 0 30px rgba(255, 0, 255, 0.8);
+    transform: scale(1.03);
+}
+
+.botao-fase.bloqueado {
+    border-color: #444;
+    color: #666;
+    background: #1a1a1a;
+    pointer-events: none;
+    box-shadow: none;
+    text-shadow: none;
+}
+
+.botao-fase.bloqueado::after {
+    content: '🔒';
+    margin-left: 15px;
+    color: #666;
+}
+
+#btn-voltar-menu {
+    position: absolute;
+    top: 25px;
+    left: 30px;
+    z-index: 100;
+    color: #fff;
+    
+    /* FONTE RESPONSIVA PARA O BOTÃO VOLTAR */
+    font-size: clamp(30px, 6vw, 45px);
+
+    font-weight: bold;
+    text-decoration: none;
+    text-shadow: 2px 2px 4px #000;
+    transition: all 0.2s ease-in-out;
+}
+    
+#btn-voltar-menu:hover {
+    color: #fdd835;
+    transform: scale(1.1);
+}
+
+/* --- MEDIA QUERY PARA TELAS PEQUENAS --- */
+/* Estilos aplicados quando a tela tem 600px de largura ou menos */
+@media (max-width: 600px) {
+    h1 {
+        margin-bottom: 40px; /* Diminui a margem do título */
+    }
+
+    .botao-fase {
+        margin: 20px auto; /* Diminui o espaçamento entre os botões */
+        min-height: 80px; /* Altura mínima menor */
+    }
+
+    #btn-voltar-menu {
+        top: 20px;
+        left: 20px;
+    }
+}

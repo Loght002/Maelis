@@ -1,0 +1,102 @@
+     <!DOCTYPE html>
+    <html lang="pt-br">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Menu Maelis</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+        <link rel="stylesheet" href="css/menuStyle.css">
+    </head>
+    <body>
+
+        <audio id="musica-menu" src="assets/musica-menu.mp3" loop></audio>
+        <audio id="som-click" src="assets/som-click.mp3"></audio>
+        <audio id="som-hover" src="assets/som-hover2.mp3"></audio>
+
+        <div id="tela-inicial">
+            <h1 data-key="pressione_tecla">Pressione qualquer tecla para iniciar...</h1>
+            <div id="tela-cheia">
+                <h1 data-key="melhor_experiencia">Para melhor experiência, aperte F11 para maximizar a tela</h1>
+            </div>
+        </div>
+
+        <div id="menu-principal">
+            <h1 class="titulo-principal" data-text="MAELIS">MAELIS</h1>
+            <h2 class="subtitulo" data-key="subtitulo">GUARDIÃ DA NÉVOA</h2>
+
+            <div class="botoes-menu">
+                <button id="botao-iniciar" data-key="iniciar_btn">INICIAR</button>
+                <button id="botao-modo-infinito" data-key="modo_infinito_btn">MODO INFINITO</button>
+                <button id="botao-creditos" data-key="creditos_btn">CRÉDITOS</button>
+                <button id="botao-ranking" data-key="ranking_btn">RANKING</button>
+            </div>
+
+            <div class="versao" data-key="versao">
+                VERSÃO: 1.0
+            </div>
+        </div>
+
+        <div id="tela-creditos">
+            <div class="creditos-animacao-container">
+                <div class="creditos-bloco">
+                    <div class="equipe"><h2 data-text="Equipe de Desenvolvimento" data-key="dev_team">Equipe de Desenvolvimento</h2><p>Fernando Gadelha</p><p>Felipe Guedes</p><p>João Miguel</p><p>Juan Gabriel</p><p>Victor Gabriel</p></div>
+                    <div class="equipe"><h2 data-text="Equipe de Roteiro" data-key="roteiro_team">Equipe de Roteiro</h2><p>Adria Thaís</p><p>Ana Clara</p><p>Dhande Gabriel</p><p>Isabella Lima</p><p>Juandarlei</p></div>
+                    <div class="equipe"><h2 data-text="Equipe de Design" data-key="design_team">Equipe de Design</h2><p>Heloíse Gabrielle</p><p>Sara Nunes</p><p>Sara Vitória</p><p>Suzana Santos</p><p>Taíssa Farias</p></div>
+                    <div class="equipe"><h2 data-text="Equipe de Audiovisual" data-key="audio_team">Equipe de Audiovisual</h2><p>Emelly Silva</p><p>Lyndon Queiros</p><p>Marcelo Silva</p><p>Marcos Ruan</p><p>Taiane Silva</p></div>
+                    <div class="equipe"><h2 data-text="Equipe de Tradução" data-key="traducao_team">Equipe de Tradução</h2><p>Angie Lisset</p><p>Camilly Castro</p><p>Ícaro Menezes</p><p>João Elias</p></div>
+                    <div class="equipe"><h2 data-text="Equipe de Monetização" data-key="monetizacao_team">Equipe de Monetização</h2><p>David Gabriel</p><p>Gabrielly Bastos</p><p>Jhenifer Souza</p><p>Júlia Padron</p><p>Luyse Gadelha</p><p>Ramizeli Cristina</p></div>
+                </div>
+                <div class="creditos-bloco" aria-hidden="true">
+                    <div class="equipe"><h2 data-text="Equipe de Desenvolvimento" data-key="dev_team">Equipe de Desenvolvimento</h2><p>Fernando Gadelha</p><p>Felipe Guedes</p><p>João Miguel</p><p>Juan Gabriel</p><p>Victor Gabriel</p></div>
+                    <div class="equipe"><h2 data-text="Equipe de Roteiro" data-key="roteiro_team">Equipe de Roteiro</h2><p>Adria Thaís</p><p>Ana Clara</p><p>Dhande Gabriel</p><p>Isabella Lima</p><p>Juandarlei</p></div>
+                    <div class="equipe"><h2 data-text="Equipe de Design" data-key="design_team">Equipe de Design</h2><p>Heloíse Gabrielle</p><p>Sara Nunes</p><p>Sara Vitória</p><p>Suzana Santos</p><p>Taíssa Farias</p></div>
+                    <div class="equipe"><h2 data-text="Equipe de Audiovisual" data-key="audio_team">Equipe de Audiovisual</h2><p>Emelly Silva</p><p>Lyndon Queiros</p><p>Marcelo Silva</p><p>Marcos Ruan</p><p>Taiane Silva</p></div>
+                    <div class="equipe"><h2 data-text="Equipe de Tradução" data-key="traducao_team">Equipe de Tradução</h2><p>Angie Lisset</p><p>Camilly Castro</p><p>Ícaro Menezes</p><p>João Elias</p></div>
+                    <div class="equipe"><h2 data-text="Equipe de Monetização" data-key="monetizacao_team">Equipe de Monetização</h2><p>David Gabriel</p><p>Gabrielly Bastos</p><p>Jhenifer Souza</p><p>Júlia Padron</p><p>Luyse Gadelha</p><p>Ramizeli Cristina</p></div>
+                </div>
+            </div>
+            <p class="instrucao-voltar" data-key="pressione_tecla_voltar">(Pressione qualquer tecla para voltar ao menu)</p>
+        </div>
+
+        <div id="tela-ranking" style="display: none; flex-direction: column; align-items: center;">
+            <h1 class="titulo-principal" data-text="RANKING" data-key="ranking_titulo">RANKING</h1>
+            <div id="ranking-list" class="ranking-container"></div>
+            <p class="instrucao-voltar" data-key="pressione_tecla_voltar">(Pressione qualquer tecla para voltar ao menu)</p>
+        </div>
+
+        <a href="#" id="botao-config">
+            <i class="fa-solid fa-gear"></i>
+        </a>
+
+        <div id="tela-configuracoes">
+            <h1 class="titulo-principal" data-text="CONFIGURAÇÕES" data-key="configuracoes_titulo">CONFIGURAÇÕES</h1>
+
+            <div class="config-container">
+                <div class="config-item">
+                    <span class="config-label" data-key="musica_label">Música</span>
+                    <button id="btn-toggle-music" class="config-btn">
+                        <i class="fas fa-volume-up"></i>
+                    </button>
+                </div>
+                <div class="config-item">
+                    <span class="config-label" data-key="sfx_label">Efeitos Sonoros</span>
+                    <button id="btn-toggle-sfx" class="config-btn">
+                        <i class="fas fa-bell"></i>
+                    </button>
+                </div>
+                <div class="config-item">
+                    <span class="config-label" data-key="idioma_label">Idioma</span>
+                    <div class="seletor-linguagem">
+                        <button id="btn-lang-prev" class="lang-arrow">&lt;</button>
+                        <span id="current-language">Português</span>
+                        <button id="btn-lang-next" class="lang-arrow">&gt;</button>
+                    </div>
+                </div>
+            </div>
+
+            <p class="instrucao-voltar" data-key="esc_voltar">(Pressione ESC para voltar ao menu)</p>
+        </div>
+
+        <script src="js/menuScript.js"></script>
+    </body>
+    </html>

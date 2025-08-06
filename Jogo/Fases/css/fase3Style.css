@@ -1,0 +1,427 @@
+body {
+    margin: 0;
+    height: 100vh;
+    background-image: url('../assets/Cenario_fase3.png'); /* Caminho para sua imagem de cenário */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    overflow: hidden;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Press Start 2P', cursive;
+}
+
+/* --- Estilos do Prólogo Atualizados --- */
+#prologo-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;    
+    height: 100%;
+    background-color: #000;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+#prologo-texto {
+    position: relative;
+    color: #fff;
+    font-size: clamp(20px, 4vw, 32px);
+    text-align: center;
+    line-height: 2;
+    animation: scroll-up 40s linear forwards;
+}
+
+#prologo-texto p {
+    margin: 2em 0;
+}
+
+@keyframes scroll-up {
+    from {
+        top: 110%;
+    }
+    to {
+        top: -110%;
+    }
+}
+
+#prologo-aviso {
+    position: absolute;
+    bottom: 5%;
+    color: #fff;
+    font-size: clamp(14px, 2vw, 18px);
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+}
+
+#prologo-aviso.visivel {
+    opacity: 1;
+    animation: blink 2s infinite;
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+}
+
+#btn-pular-prologo {
+    position: absolute;
+    bottom: 5%;
+    right: 3%;
+    z-index: 101; /* Garante que fique acima do texto */
+    font-family: 'Press Start 2P', cursive;
+    padding: 10px 15px;
+    font-size: 14px;
+    color: #fff;
+    background-color: #4a4a4a;
+    border: 2px solid #888;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+#btn-pular-prologo:hover {
+    background-color: #6a6a6a;
+    border-color: #aaa;
+}
+
+/* --- Fim dos Estilos do Prólogo --- */
+
+#game-container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+    max-width: 800px;
+    max-height: 1000px;
+    object-fit: contain;
+    border-radius: 8px;
+    z-index: 150;
+}
+
+.screenshake {
+    animation: shake 0.5s;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translate(0, 0); }
+    10%, 30%, 50%, 70%, 90% { transform: translate(-5px, 0); }
+    20%, 40%, 60%, 80% { transform: translate(5px, 0); }
+}
+
+/* ================================================= */
+/* --- CÓDIGO DA INTERFACE (VIDAS E PONTOS) --- */
+/* ================================================= */
+#pontuacao, #vidas-container {
+    position: fixed; /* Ou absolute, dependendo de como você quer fixar */
+    left: 20px;
+    font-family: 'Press Start 2P', cursive;
+    color: white;
+    text-shadow: 2px 2px 4px black;
+    z-index: 999;
+    pointer-events: none;
+}
+
+#pontuacao {
+    top: 30px;
+    left: 160px;
+    font-size: 20px;
+}
+
+#vidas-container {
+    top: 50px;
+    left: 152px;
+    font-size: 30px;
+    display: flex;
+}
+
+#escudos-container {
+    display: flex; /* Para os escudos ficarem em linha */
+    margin-top: 5px; /* Espaço entre corações e escudos */
+    font-size: 30px; /* Tamanho do escudo */
+    color: #00BFFF; /* Cor do escudo */
+    text-shadow: 2px 2px 4px black;
+    position: fixed; /* Fixa os escudos na tela */
+    top: 85px; /* Alinha com os corações */
+    left: 152px; /* Alinha com os corações */
+}
+
+#escudos-container .escudo {
+    display: inline-block;
+}
+
+
+/* Barras de Magia existentes (Sombra e Fogo) */
+.game-ui { /* Adicionado para agrupar estilos comuns das barras de magia */
+    position: absolute;
+    left: 10px;
+    width: clamp(150px, 25vw, 200px); /* Largura responsiva */
+    height: clamp(20px, 3.5vh, 25px); /* Altura responsiva */
+    background-color: #333;
+    border: 2px solid #fff;
+    border-radius: 5px;
+    overflow: hidden;
+    display: none; /* Inicia escondida */
+    align-items: center;
+    padding-left: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    z-index: 160;
+}
+
+#magic-bar-container {
+    top: 140px;
+    border: 2px solid #9400D3; /* Cor da borda da sombra */
+}
+
+#magic-bar-fill {
+    height: 100%;
+    width: 0%; /* Começa vazia */
+    background-color: #8A2BE2; /* Cor da magia */
+    transition: width 0.1s linear;
+    border-radius: 2px;
+}
+
+#fire-magic-bar-container {
+    top: 172px; /* Ajuste para abaixo da barra de sombra */
+    border: 2px solid #FFA500; /* Cor da borda do fogo */
+}
+
+#fire-magic-bar-fill {
+    height: 100%;
+    width: 0%;
+    background-color: #FFA500;
+    transition: width 0.1s linear;
+    border-radius: 2px;
+}
+
+/* NOVO: Estilos para a Barra de Gelo */
+#gelo-bar-container {
+    top: 203px; /* Abaixo da barra de fogo */
+    border: 2px solid #87CEEB; /* Borda da cor do gelo */
+}
+
+#gelo-bar-label, #magic-bar-label, #fire-magic-bar-label { /* Adicionado para as labels de todas as barras */
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    color: #fff;
+    font-size: 10px; /* Tamanho de fonte para a label */
+    text-shadow: 1px 1px 2px #000;
+    z-index: 12; /* Acima do preenchimento */
+    transition: opacity 0.3s ease-in-out;
+}
+
+#gelo-bar-fill {
+    height: 100%;
+    width: 0%; /* Começa vazia */
+    background-color: #00BFFF; /* Cor de preenchimento do gelo */
+    transition: width 0.3s ease-in-out;
+    border-radius: 3px;
+}
+
+/* Classes para estados das barras de magia */
+.game-ui.cooldown .game-ui-fill { /* Generalizado para todas as barras */
+    background-color: #555;
+    box-shadow: none;
+    transition: none;
+}
+.game-ui.cooldown .game-ui-label { /* Generalizado para todas as barras */
+    opacity: 0.4;
+}
+
+#magic-bar-fill.pronta { box-shadow: 0 0 15px 5px rgba(138, 43, 226, 0.8); }
+#fire-magic-bar-fill.pronta { box-shadow: 0 0 15px 5px rgba(255, 165, 0, 0.8); }
+#gelo-bar-fill.pronta { box-shadow: 0 0 15px 5px rgba(0, 191, 255, 0.8); }
+
+#onda-display {
+    position: absolute;
+    top: 30px;
+    right: 15px;
+    color: #fff;
+    font-size: 20px;
+    z-index: 160;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+}
+
+#boss-ui {
+    position: absolute;
+    top: 2%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    max-width: 500px;
+    z-index: 160;
+    text-align: center;
+}
+
+#boss-name {
+    color: #ff4d4d;
+    font-size: clamp(14px, 3vw, 20px);
+    text-shadow: 2px 2px 4px #000;
+    margin-bottom: 10px;
+}
+
+#boss-health-container {
+    width: 100%;
+    height: 20px;
+    background-color: rgba(0, 0, 0, 0.5);
+    border: 2px solid #8B008B;
+    border-radius: 5px;
+}
+
+#boss-health-bar {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, #da70d6, #8a2be2);
+    border-radius: 2px;
+    transition: width 0.3s ease-in-out, background 0.5s ease;
+}
+
+#boss-health-bar.phase-2 {
+    background: linear-gradient(90deg, #ffd700, #ff8c00);
+}
+
+#boss-health-bar.phase-3 {
+    background: linear-gradient(90deg, #ff4d4d, #c62828);
+}
+
+.lance-warning-area {
+    position: absolute;
+    z-index: 155;
+    background-color: rgba(255, 100, 100, 0.5);
+    border-radius: 50%;
+    transform: translate(-50%, -50%); 
+    animation: pulse-lance 1.2s forwards;
+}
+
+@keyframes pulse-lance {
+    0% { width: 0px; height: 0px; opacity: 0.8; }
+    80% { opacity: 0.8; }
+    100% { width: 100px; height: 100px; opacity: 0; }
+}
+
+/* Estilos para as telas de sobreposição (pop-ups) */
+#caixa-dialogo,
+#fim-de-fase,
+#tela-falha {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 200; /* Z-index alto para ficar acima de tudo */
+    width: 80%;
+    max-width: 600px;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    color: #e0e0e0;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.7);
+    display: none; /* O JavaScript controla a visibilidade */
+}
+
+#caixa-dialogo p, #fim-de-fase h1, #fim-de-fase p, #tela-falha h1, #tela-falha p { 
+    margin-bottom: 20px; 
+    line-height: 1.6; 
+}
+
+#caixa-dialogo,
+#fim-de-fase {
+    background-color: rgba(10, 20, 10, 0.9);
+    border: 2px solid #2e4d2e;
+}
+
+#tela-falha {
+    background-color: rgba(40, 0, 20, 0.9);
+    border: 2px solid #ff3c3c;
+    display: none; /* Alterado para flex no JS quando necessário */
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+#caixa-dialogo button, #fim-de-fase button, #tela-falha button {
+    padding: clamp(8px, 2vw, 15px) clamp(15px, 4vw, 30px); /* Padding responsivo */
+    font-family: 'Press Start 2P', cursive;
+    border: 2px solid #fff; 
+    border-radius: 10px;
+    color: #fff;
+    cursor: pointer;
+    user-select: none; /* Impede seleção de texto */
+    text-shadow: 2px 2px 4px #000;
+    transition: all 0.2s ease;
+    width: auto; /* Ajusta a largura ao conteúdo */
+    white-space: nowrap; /* Impede quebra de linha do texto do botão  */
+    text-align: center;
+    margin: 0; /* Remover margens padrão para controle total com gap */
+
+    /* Cores e sombras do #btnVoltarMenu do Modo Infinito */
+    background-color: #4CAF50; /* Verde */
+    box-shadow: 0 0 10px #4CAF50, inset 0 0 5px rgba(255, 255, 255, 0.5); 
+}
+
+#caixa-dialogo button:hover, #fim-de-fase button:hover {
+    background-color: #66bb6a; /* Verde mais claro no hover */
+    box-shadow: 0 0 20px #4CAF50, inset 0 0 8px rgba(255, 255, 255, 0.6);
+    transform: scale(1.05);
+}
+
+#tela-falha button { 
+    font-family: 'Press Start 2P', cursive;
+    padding: clamp(8px, 2vw, 15px) clamp(15px, 4vw, 30px); /* Padding responsivo */
+    border: 2px solid #fff; /* Borda branca para consistência */
+    border-radius: 10px;
+    color: #fff;
+    cursor: pointer;
+    user-select: none; /* Impede seleção de texto */
+    text-shadow: 2px 2px 4px #000;
+    transition: all 0.2s ease;
+    margin: 0;
+    width: auto; /* Ajusta a largura ao conteúdo */
+    white-space: nowrap; /* Impede quebra de linha do texto do botão */
+
+    /* Cores e sombras do #btnReiniciar do Modo Infinito */
+    background-color: #ff3c3c; /* Vermelho */
+    box-shadow: 0 0 10px #ff3c3c, inset 0 0 5px rgba(255, 255, 255, 0.5);
+}
+
+#tela-falha button:hover {
+    background-color: #ff6666; /* Vermelho mais claro no hover */
+    box-shadow: 0 0 20px #ff3c3c, inset 0 0 8px rgba(255, 255, 255, 0.6);
+    transform: scale(1.05);
+}
+
+
+/* NOVA SEÇÃO PARA A REAÇÃO DA MAELIS (MODIFICADA) */
+#maelis-reaction-container {
+    position: absolute;
+    top: 35px; /* Alinha verticalmente com os corações */
+    left: 1px; /* Inicialmente na mesma posição, ajustaremos com margem */
+    width: 95px; /* Tamanho inicial, ajuste conforme o tamanho dos corações */
+    height: 80px; /* Tamanho inicial, ajuste conforme o tamanho dos corações */
+    z-index: 100;
+    overflow: hidden;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    margin-left: 30px; /* Espaço entre os corações e a cabecinha (ajuste conforme o tamanho da fonte dos corações) */
+}
+
+#maelis-reaction-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; 
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+/* FIM NOVA SEÇÃO */

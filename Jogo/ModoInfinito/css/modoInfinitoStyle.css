@@ -1,0 +1,300 @@
+/* =======================================================
+   --- ESTILOS GERAIS E LAYOUT DA PÁGINA ---
+   ======================================================= */
+body {
+    margin: 0;
+    height: 100vh;
+    background-image: url('../../Fases/assets/cenario_fase_infinita.jpg'); 
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Press Start 2P', cursive;
+}
+
+#game-container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* =======================================================
+   --- CANVAS E ANIMAÇÕES ---
+   ======================================================= */
+canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+    max-width: 800px;
+    max-height: 1000px;
+    object-fit: contain; /* Preserva a proporção do jogo */
+    border-radius: 8px;
+    z-index: 10;
+}
+
+.screenshake {
+    animation: shake .5s;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translate(0, 0); }
+    10%, 30%, 50%, 70%, 90% { transform: translate(-5px, 0); }
+    20%, 40%, 60%, 80% { transform: translate(5px, 0); }
+}
+
+/* =======================================================
+   --- INTERFACE DO JOGO (HUD) ---
+   ======================================================= */
+
+/* Placar de Ciclo e Onda (Canto Superior Direito) */
+#ciclo-display, #onda-display {
+    position: absolute;
+    right: 2vw; /* Posição relativa à largura da tela */
+    transform: none;
+    z-index: 20;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.8);
+    text-align: right;
+    color: #ffd700;
+    font-size: clamp(1rem, 2.5vw, 1.5rem); /* Tamanho de fonte flexível */
+}
+
+#ciclo-display {
+    top: 3vh; /* Posição relativa à altura da tela */
+}
+
+#onda-display {
+    top: 8vh; /* Posição relativa à altura da tela */
+    color: #fff;
+    font-size: clamp(0.9rem, 2vw, 1.3rem);
+}
+
+/* Reação da Maelis (Canto Superior Esquerdo) */
+#maelis-reaction-container {
+    position: absolute;
+    top: 3vh; /* Posição relativa */
+    left: 2vw;  /* Posição relativa */
+    width: clamp(75px, 10vw, 95px);  /* Largura flexível */
+    height: clamp(65px, 8.5vw, 80px); /* Altura flexível */
+    z-index: 20;
+    overflow: hidden;
+    box-shadow: 0 0 10px rgba(0,0,0,.5);
+}
+
+#maelis-reaction-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+/* Pontuação, Vidas e Escudos (Abaixo da Maelis) */
+#pontuacao, #vidas-container, #escudos-container {
+    position: absolute;
+    left: calc(2vw + clamp(75px, 10vw, 95px) + 15px); /* Alinhado à direita da imagem da Maelis */
+    font-family: 'Press Start 2P', cursive;
+    color: #fff;
+    text-shadow: 2px 2px 4px #000;
+    z-index: 20;
+}
+
+#pontuacao {
+    top: 3.5vh; /* Alinhado verticalmente com a imagem */
+    font-size: clamp(0.8rem, 2vw, 1.1rem);
+}
+
+#vidas-container {
+    top: 6.5vh;
+    font-size: clamp(1rem, 2.5vw, 1.5rem);
+    display: flex;
+}
+
+#escudos-container {
+    top: 11vh;
+    font-size: clamp(1rem, 2.5vw, 1.5rem);
+    display: flex;
+    color: #00bfff;
+}
+
+#escudos-container .escudo {
+    display: inline-block;
+}
+
+/* =======================================================
+   --- BARRAS DE MAGIA ---
+   ======================================================= */
+.game-ui {
+    position: absolute;
+    left: 2vw; /* Alinhado com a imagem da Maelis */
+    width: clamp(150px, 20vw, 220px); /* Largura flexível */
+    height: clamp(20px, 3vh, 25px);   /* Altura flexível */
+    background-color: #333;
+    border-radius: 5px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    z-index: 20;
+}
+
+#magic-bar-container {
+    top: 16.5vh; /* Posições relativas */
+    border: 2px solid #9400d3;
+}
+
+#fire-magic-bar-container {
+    top: 20.5vh;
+    border: 2px solid #ffa500; 
+}
+
+#gelo-bar-container {
+    top: 24.5vh;
+    border: 2px solid #87ceeb;
+}
+
+.game-ui [id$="-fill"] { /* Seletor para todos os 'fills' */
+    height: 100%;
+    width: 0;
+    transition: width .2s linear, box-shadow .3s ease;
+    border-radius: 2px;
+}
+
+#magic-bar-fill { background-color: #8a2be2; }
+#fire-magic-bar-fill { background-color: #ffa500; }
+#gelo-bar-fill { background-color: #00bfff; }
+
+
+.game-ui [id$="-label"] { /* Seletor para todos os 'labels' */
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    color: #fff;
+    font-size: clamp(0.5rem, 1.5vw, 0.7rem); /* Fonte flexível */
+    text-shadow: 1px 1px 2px #000;
+    z-index: 12;
+    pointer-events: none;
+}
+
+/* Efeitos de 'pronta' e 'cooldown' */
+.game-ui.cooldown [id$="-fill"] { background-color: #555; box-shadow: none; }
+.game-ui.cooldown [id$="-label"] { opacity: .4; }
+#magic-bar-fill.pronta { box-shadow: 0 0 15px 5px rgba(138,43,226,.8); }
+#fire-magic-bar-fill.pronta { box-shadow: 0 0 15px 5px rgba(255,165,0,.8); }
+#gelo-bar-fill.pronta { box-shadow: 0 0 15px 5px rgba(0,191,255,.8); }
+
+/* =======================================================
+   --- INTERFACE DO CHEFE (BOSS UI) ---
+   ======================================================= */
+#boss-ui {
+    position: absolute;
+    top: 2%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: clamp(280px, 60vw, 500px); /* Largura flexível */
+    z-index: 30;
+    text-align: center;
+}
+
+#boss-name {
+    color: #ff4d4d;
+    font-size: clamp(0.8rem, 3vw, 1.25rem);
+    text-shadow: 2px 2px 4px #000;
+    margin-bottom: 10px;
+}
+
+#boss-health-container {
+    width: 100%;
+    height: clamp(15px, 3vh, 20px);
+    background-color: rgba(0,0,0,.5);
+    border: 2px solid #8b008b;
+    border-radius: 5px;
+}
+
+#boss-health-bar {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg,#da70d6,#8a2be2);
+    border-radius: 2px;
+    transition: width .3s ease-in-out,background .5s ease;
+}
+#boss-health-bar.phase-2 { background: linear-gradient(90deg,#ffd700,#ff8c00); }
+#boss-health-bar.phase-3 { background: linear-gradient(90deg,#ff4d4d,#c62828); }
+
+/* =======================================================
+   --- TELAS DE POP-UP ---
+   ======================================================= */
+#caixa-dialogo, #fim-de-fase, #tela-falha {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    z-index: 200;
+    width: clamp(280px, 85vw, 600px); /* Largura flexível */
+    padding: clamp(1rem, 3vw, 2rem);
+    border-radius: 10px;
+    text-align: center;
+    color: #e0e0e0;
+    box-shadow: 0 0 15px rgba(0,0,0,.7);
+    display: none; /* Controlado por JS */
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+#caixa-dialogo p, #fim-de-fase p, #tela-falha p {
+    font-size: clamp(0.8rem, 2.5vw, 1.1rem);
+    line-height: 1.6;
+}
+#fim-de-fase h1, #tela-falha h1 {
+    font-size: clamp(1.2rem, 4vw, 2rem);
+}
+
+#caixa-dialogo, #fim-de-fase {
+    background-color: rgba(10,20,10,.9);
+    border: 2px solid #2e4d2e;
+}
+#tela-falha {
+    background-color: rgba(40,0,20,.9);
+    border: 2px solid #ff3c3c;
+}
+
+/* Botões dos Pop-ups */
+#caixa-dialogo button, #fim-de-fase button, #tela-falha button {
+    padding: clamp(10px, 2vw, 15px) clamp(20px, 4vw, 30px);
+    font-family: 'Press Start 2P', cursive;
+    font-size: clamp(0.7rem, 2.5vw, 0.9rem);
+    border: 2px solid #fff;
+    border-radius: 10px;
+    color: #fff;
+    cursor: pointer;
+    text-shadow: 2px 2px 4px #000;
+    transition: all .2s ease;
+    margin: 5px; /* Adiciona margem para o caso de quebra de linha */
+}
+
+#tela-falha button {
+    background-color: #ff3c3c;
+    box-shadow: 0 0 10px #ff3c3c,inset 0 0 5px rgba(255,255,255,.5);
+}
+#tela-falha button:hover {
+    background-color: #ff6666;
+    box-shadow: 0 0 20px #ff3c3c,inset 0 0 8px rgba(255,255,255,.6);
+    transform: scale(1.05);
+}
+
+#btn-continuar, #btnVoltarMenuFase {
+    background-color: #4caf50;
+    box-shadow: 0 0 10px #4caf50,inset 0 0 5px rgba(255,255,255,.5);
+}
+#btn-continuar:hover, #btnVoltarMenuFase:hover {
+    background-color: #66bb6a;
+    box-shadow: 0 0 20px #4caf50,inset 0 0 8px rgba(255,255,255,.6);
+    transform: scale(1.05);
+}

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-key="titulo_pagina">Maelis: Modo Infinito</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/modoInfinitoStyle.css" />
+</head>
+<body>
+
+    <div id="ciclo-display" style="display: none;" data-key="ciclo">Ciclo: 1</div>
+    <div id="pontuacao" style="display: none;" data-key="pontos">Pontos: 0</div>
+    <div id="vidas-container"></div>
+    <div id="escudos-container"></div>
+
+    <div id="maelis-reaction-container">
+        <img id="maelis-normal" src="../Fases/assets/maelis-face-normal.png" alt="Maelis Normal">
+        <img id="maelis-chorando" src="../Fases/assets/maelis-face-chorando.png" alt="Maelis Chorando" style="display: none;">
+        <img id="maelis-descabelada" src="../Fases/assets/maelis-face-descabelada.png" alt="Maelis Descabelada" style="display: none;">
+        <img id="maelis-morta" src="../Fases/assets/maelis-face-morta.png" alt="Maelis Morta" style="display: none;">
+    </div>
+
+    <audio id="som-click" src="assets/som-click.mp3"></audio>
+    <audio id="som-hover" src="assets/som-hover2.mp3"></audio>
+    <audio id="som-game-over" src="assets/som-game-over.mp3"></audio>
+    <audio id="som-disparo" src="assets/som-disparo.mp3"></audio>
+    <audio id="dano-maelis" src="assets/som-dano-maelis.mp3"></audio>
+    <audio id="som-da-criatura" src="assets/barulho-de-criatura.mp3"></audio>
+    <audio id="som-habilidade" src="assets/som-habilidade.mp3"></audio>
+    <audio id="musica-acao" src="assets/musica-acao3.mp3" loop></audio>
+    <audio id="som-vitoria" src="assets/musica-vitoria.mp3"></audio>
+
+    <div id="game-container">
+        <canvas id="gameCanvas" width="800" height="1000"></canvas>
+    
+        <div id="onda-display" style="display:none;" data-key="onda">Onda 1 / 8</div>
+        
+        <div id="magic-bar-container" class="game-ui">
+            <div id="magic-bar-fill"></div>
+            <span id="magic-bar-label" data-key="magia_sombra">Magia das Sombras</span>
+        </div>
+        
+        <div id="fire-magic-bar-container" class="game-ui">
+            <div id="fire-magic-bar-fill"></div>
+            <span id="fire-magic-bar-label" data-key="magia_fogo">Magia de Fogo</span>
+        </div>
+
+        <div id="gelo-bar-container" class="game-ui">
+            <div id="gelo-bar-fill"></div>
+            <span id="gelo-bar-label" data-key="magia_gelo">Magia de Gelo</span>
+        </div>
+    
+        <div id="boss-ui" style="display:none;">
+            <div id="boss-name">Gorgóvia, A Sombra Errante</div>
+            <div id="boss-health-container">
+                <div id="boss-health-bar"></div>
+            </div>
+        </div>
+    
+        <div id="caixa-dialogo" style="display:none;">
+            <p id="texto-dialogo"></p>
+            <button id="btn-continuar" data-key="btn_continuar">Continuar</button>
+        </div>
+    
+        <div id="fim-de-fase" style="display:none;">
+            <h1 data-key="ciclo_concluido_titulo">Ciclo Concluído!</h1>
+            <p data-key="ciclo_concluido_texto">A escuridão recua, mas a ameaça persiste...</p>
+            <button id="btnVoltarMenuFase" data-key="btn_voltar_menu">Voltar ao Menu</button>
+        </div>
+    
+        <div id="tela-falha" style="display:none;">
+            <h1 data-key="falha_titulo">Você foi corrompido.</h1>
+            <p data-key="falha_texto">A escuridão venceu desta vez.</p>
+            <button id="btn-tentar-novamente" data-key="btn_tentar_novamente">Tentar Novamente</button>
+            <button id="btn-voltar-menu-falha" data-key="btn_voltar_menu">Voltar ao Menu</button>
+        </div>
+    </div>
+    
+    <script src="js/modoInfinitoScript.js"></script>
+
+</body>
+</html>

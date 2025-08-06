@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-key="titulo_fase1">Maelis: Fase 1 - Clareira da Névoa</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/fase1Style.css" />
+</head>
+<body>
+
+    <div id="pontuacao" data-key="pontos">Pontos: 0</div>
+    <div id="vidas"></div>
+    <div id="onda-display" style="display:none;"></div>
+
+    <audio id="som-click" src="assets/som-click.mp3"></audio>
+    <audio id="som-hover" src="assets/som-hover2.mp3"></audio> 
+    <audio id="som-game-over" src="assets/som-game-over.mp3"></audio>
+    <audio id="som-disparo" src="assets/som-disparo.mp3"></audio>
+    <audio id="musica-acao" src="assets/musica-acao.mp3" loop></audio>
+    <audio id="musica-vitoria" src="assets/musica-vitoria.mp3" ></audio>
+    <audio id="dano-maelis" src="assets/som-dano-maelis.mp3"></audio>
+    <audio id="som-da-criatura" src="assets/barulho-de-criatura.mp3"></audio>
+    
+    <div id="maelis-reaction-container">
+            <img id="maelis-normal" src="assets/maelis-face-normal.png" alt="Maelis Normal">
+            <img id="maelis-chorando" src="assets/maelis-face-chorando.png" alt="Maelis Chorando" style="display: none;">
+            <img id="maelis-descabelada" src="assets/maelis-face-descabelada.png" alt="Maelis Descabelada" style="display: none;">
+            <img id="maelis-morta" src="assets/maelis-face-morta.png" alt="Maelis Morta" style="display: none;">
+        </div>
+
+    <div id="game-container">
+        <canvas id="gameCanvas" width="800" height="1000"></canvas>
+
+        <div id="tutorial-movimento" class="tutorial-texto" data-key="tutorial_movimento">Use as setas ← e → para mover.</div>
+        <div id="tutorial-ataque" class="tutorial-texto" style="display:none;" data-key="tutorial_ataque">Pressione 'Espaço' para atacar.</div>
+
+        <div id="aviso-escape" class="aviso-texto" style="display:none;" data-key="aviso_escape">AVISO! Um inimigo escapou. Não deixe que aconteça de novo!</div>
+
+        <div id="caixa-dialogo" style="display:none;">
+            <p id="texto-dialogo"></p>
+            <button id="btn-continuar" data-key="btn_continuar">Continuar</button>
+        </div>
+
+        <div id="fim-de-fase" style="display:none;">
+            <h1 data-key="vitoria_titulo">Fase Concluída!</h1>
+            <button id="btnVoltarMenuFase" data-key="btn_voltar_menu">Voltar ao Menu</button>
+        </div>
+
+        <div id="tela-falha" style="display:none;">
+            <h1 data-key="derrota_titulo">Fim de fase!</h1> <p data-key="derrota_subtitulo">A escuridão venceu desta vez.</p> <button id="btn-tentar-novamente" data-key="btn_tentar_novamente">Tentar Novamente</button>
+            <button id="btn-voltar-menu-falha" data-key="btn_voltar_menu">Voltar ao Menu</button> </div>
+    </div>
+
+    <script src="js/fase1Script.js"></script>
+</body>
+</html>

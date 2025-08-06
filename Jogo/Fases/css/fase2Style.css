@@ -1,0 +1,358 @@
+body {
+    margin: 0;
+    height: 100vh;
+    background-image: url('../assets/Cenario_da_2_fases.png'); /* Caminho para sua imagem de cenário */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    overflow: hidden; /* Previne rolagem */
+    display: flex; /* Usa flexbox para centralizar */
+    justify-content: center; /* Centraliza horizontalmente */
+    align-items: center; /* Centraliza verticalmente */
+    font-family: 'Press Start 2P', cursive;
+}
+
+/* Estilos para o tremor no game-container */
+#game-container.shake {
+    animation: shake 0.1s infinite linear;
+}
+
+@keyframes shake {
+    0% { transform: translate(3px, 3px); }
+    10% { transform: translate(-3px, -4px); }
+    20% { transform: translate(-6px, 0px); }
+    30% { transform: translate(6px, 4px); }
+    40% { transform: translate(3px, -3px); }
+    50% { transform: translate(-3px, 4px); }
+    60% { transform: translate(-6px, 3px); }
+    70% { transform: translate(6px, 3px); }
+    80% { transform: translate(-3px, -3px); }
+    90% { transform: translate(3px, 4px); }
+    100% { transform: translate(3px, -4px); }
+}
+
+.shake {
+    animation: shake 0.1s infinite linear;
+}
+
+@keyframes shake {
+    0% { transform: translate(3px, 3px); }
+    10% { transform: translate(-3px, -4px); }
+    20% { transform: translate(-6px, 0px); }
+    30% { transform: translate(6px, 4px); }
+    40% { transform: translate(3px, -3px); }
+    50% { transform: translate(-3px, 4px); }
+    60% { transform: translate(-6px, 3px); }
+    70% { transform: translate(6px, 3px); }
+    80% { transform: translate(-3px, -3px); }
+    90% { transform: translate(3px, 4px); }
+    100% { transform: translate(3px, -4px); }
+}
+
+#game-container {
+    position: relative;
+    /* Max-width e max-height garantem que ele se adapte */
+    max-width: 100vw;
+    max-height: 100vh;
+    /* Mantém a proporção. Definiremos as dimensões do canvas no JS. */
+    width: auto;
+    height: auto;
+    aspect-ratio: 0.8; /* (canvas.width / canvas.height) = 800/1000 = 0.8 */
+    display: flex; /* Flex para conter o canvas */
+    justify-content: center;
+    align-items: center;
+}
+
+#gameCanvas {
+    /* Faz o canvas preencher o contêiner, respeitando o aspect-ratio */
+    width: 100%;
+    height: 100%;
+    display: block; /* Remove espaço extra abaixo do canvas */
+}
+
+/* ================================================= */
+/* --- CÓDIGO DA INTERFACE (VIDAS E PONTOS) --- */
+/* ================================================= */
+#pontuacao, #vidas-container {
+    position: fixed; /* Ou absolute, dependendo de como você quer fixar */
+    left: 20px;
+    font-family: 'Press Start 2P', cursive;
+    color: white;
+    text-shadow: 2px 2px 4px black;
+    z-index: 999;
+    pointer-events: none;
+}
+
+#pontuacao {
+    top: 30px;
+    left: 160px;
+    font-size: 20px;
+}
+
+#vidas-container {
+    top: 50px;
+    left: 152px;
+    font-size: 30px;
+    display: flex; /* Flex para alinhar os corações */
+}
+
+/* Barras de Magia - Usam porcentagens para posicionamento e clamp para fonte/altura */
+#gelo-bar-container, #sombra-bar-container {
+    position: fixed; /* Fixa na viewport */
+    top: 8%; /* Ajuste a posição abaixo da pontuação */
+    left: 2%; /* Alinha com a pontuação */
+    width: clamp(150px, 25vw, 200px); /* Largura responsiva */
+    height: clamp(20px, 3.5vh, 25px); /* Altura responsiva */
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 5px;
+    z-index: 100; /* Por cima de tudo */
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+}
+
+#gelo-bar-container {
+    top: 15%;
+    border: 2px solid #87CEEB;
+    left: 1%; /* Alinha com as outras */
+}
+
+#sombra-bar-container {
+    position: fixed; /* Fixa na viewport */
+    /* Calcula o top baseado no topo da barra de gelo + altura dela + margem */
+    top: calc(15% + clamp(20px, 3.5vh, 25px) + 1%); /* Ajusta o top com base na altura da barra de gelo */
+    left: 1%; /* Alinha com as outras */
+    border: 2px solid #9400D3;
+    z-index: 100; /* Por cima de tudo */
+}
+
+#gelo-bar-label, #sombra-bar-label {
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    color: #fff;
+    /* Fonte diminuída para a barra de sombra */
+    font-size: clamp(8px, 1.5vw, 10px); /* Tamanho de fonte responsivo ajustado */
+    text-shadow: 1px 1px 2px #000;
+    z-index: 12;
+    transition: opacity 0.3s ease-in-out;
+}
+
+#gelo-bar-fill, #sombra-bar-fill {
+    height: 100%;
+    width: 0%;
+    transition: width 0.3s ease-in-out;
+    border-radius: 3px;
+}
+
+#gelo-bar-fill {
+    background-color: #00BFFF;
+}
+
+#sombra-bar-fill {
+    background-color: #8A2BE2;
+}
+
+/* As classes Cooldown e Pronta permanecem as mesmas */
+#gelo-bar-fill.pronta { box-shadow: 0 0 15px 5px rgba(0, 191, 255, 0.8); }
+#gelo-bar-container.cooldown #gelo-bar-label { opacity: 0.4; }
+#gelo-bar-container.cooldown #gelo-bar-fill { background-color: #555; box-shadow: none; transition: none; }
+#sombra-bar-fill.pronta { box-shadow: 0 0 15px 5px rgba(138, 43, 226, 0.8); }
+#sombra-bar-container.cooldown #sombra-bar-label { opacity: 0.4; }
+#sombra-bar-container.cooldown #sombra-bar-fill { background-color: #555; box-shadow: none; transition: none; }
+
+/* Telas de Diálogo, Falha e Bom Trabalho - já são em sua maioria responsivas com clamp e porcentagens */
+#caixa-dialogo, #fim-de-fase, #tela-falha, #tela-bom-trabalho {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.85);
+    border: 2px solid #6b90a3;
+    border-radius: 10px;
+    padding: 20px; /* Usa padding absoluto, pois é pequeno */
+    text-align: center;
+    z-index: 200; /* Aumenta um pouco para garantir */
+    color: #fff;
+    width: 80%; /* Largura em porcentagem */
+    max-width: 600px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.7);
+    display: none; /* Controlado por JS */
+    /* Adiciona propriedades flex para layout interno dos botões, como feito para #tela-falha */
+    flex-direction: column;
+    align-items: center; /* ESSA PROPRIEDADE CENTRALIZA OS ITENS FILHOS HORIZONTALMENTE */
+    gap: 15px;
+}
+
+/* Garante que botões e texto dentro desses modais também sejam responsivos */
+#caixa-dialogo p, #fim-de-fase h1, #tela-falha h1, #tela-falha p, #tela-bom-trabalho h1 {
+    margin-bottom: 20px;
+    font-size: clamp(16px, 3.5vw, 22px);
+    line-height: 1.6;
+    text-align: center;
+}
+
+#caixa-dialogo button, #fim-de-fase button, #tela-falha button, #tela-bom-trabalho button {
+    padding: clamp(8px, 2vw, 15px) clamp(15px, 4vw, 30px); /* Padding responsivo */
+    font-family: 'Press Start 2P', cursive;
+    border: 2px solid #fff;
+    border-radius: 10px;
+    color: #fff;
+    cursor: pointer;
+    user-select: none; /* Impede seleção de texto */
+    text-shadow: 2px 2px 4px #000;
+    transition: all 0.2s ease;
+    
+    /* --- PROPRIEDADES PARA FAZER O BOTÃO ESTICAR E PARECER CENTRALIZADO --- */
+    display: block; /* Garante que o botão se comporte como um bloco */
+    width: 80%; /* Ocupa 80% da largura do contêiner pai */
+    max-width: 300px; /* Limite a largura máxima para não ficar gigante */
+    margin: 0 auto; /* Centraliza horizontalmente o bloco */
+    /* --- FIM DAS PROPRIEDADES --- */
+
+    white-space: nowrap; /* Impede quebra de linha do texto do botão */
+    text-align: center; /* Centraliza o texto DENTRO do botão */
+    /* Removido: margin: 0; pois margin: 0 auto; já o inclui */
+
+    /* Cores e sombras do #btnVoltarMenu do Modo Infinito */
+    background-color: #4CAF50; /* Verde */
+    box-shadow: 0 0 10px #4CAF50, inset 0 0 5px rgba(255, 255, 255, 0.5);
+}
+
+#caixa-dialogo button:hover, #fim-de-fase button:hover {
+    background-color: #66bb6a; /* Verde mais claro no hover */
+    box-shadow: 0 0 20px #4CAF50, inset 0 0 8px rgba(255, 255, 255, 0.6);
+    transform: scale(1.05);
+}
+
+#tela-falha {
+    background-color: rgba(40, 0, 20, 0.9);
+    border: 2px solid #ff3c3c;
+}
+
+/* BOTÕES PADRONIZADOS PARA TELA DE FALHA (CORES DO btnReiniciar) */
+#tela-falha button {
+    font-family: 'Press Start 2P', cursive;
+    padding: clamp(8px, 2vw, 15px) clamp(15px, 4vw, 30px); /* Padding responsivo */
+    border: 2px solid #fff; /* Borda branca para consistência */
+    border-radius: 10px;
+    color: #fff;
+    cursor: pointer;
+    user-select: none; /* Impede seleção de texto */
+    text-shadow: 2px 2px 4px #000;
+    transition: all 0.2s ease;
+    /* Removido: margin: 0; pois margin: 0 auto; já o inclui */
+    
+    /* --- PROPRIEDADES PARA FAZER O BOTÃO ESTICAR E PARECER CENTRALIZADO --- */
+    display: block; /* Garante que o botão se comporte como um bloco */
+    width: 80%; /* Ocupa 80% da largura do contêiner pai */
+    max-width: 300px; /* Limite a largura máxima para não ficar gigante em telas muito largas */
+    margin: 0 auto; /* Centraliza horizontalmente o bloco */
+    /* --- FIM DAS PROPRIEDADES --- */
+
+    white-space: nowrap; /* Impede quebra de linha do texto do botão */
+    text-align: center;
+
+    /* Cores e sombras do #btnReiniciar do Modo Infinito */
+    background-color: #ff3c3c; /* Vermelho */
+    box-shadow: 0 0 10px #ff3c3c, inset 0 0 5px rgba(255, 255, 255, 0.5);
+}
+
+#tela-falha button:hover {
+    background-color: #ff6666; /* Vermelho mais claro no hover */
+    box-shadow: 0 0 20px #ff3c3c, inset 0 0 8px rgba(255, 255, 255, 0.6);
+    transform: scale(1.05);
+}
+
+
+#tela-bom-trabalho {
+    background-color: rgba(0, 0, 0, 0.85);
+    border: 2px solid #4CAF50;
+}
+
+#tela-bom-trabalho button {
+    padding: clamp(8px, 2vw, 15px) clamp(15px, 4vw, 30px); /* Padding responsivo */
+    font-family: 'Press Start 2P', cursive;
+    border: 2px solid #fff;
+    border-radius: 10px;
+    color: #fff;
+    cursor: pointer;
+    user-select: none; /* Impede seleção de texto */
+    text-shadow: 2px 2px 4px #000;
+    transition: all 0.2s ease;
+    
+    /* --- PROPRIEDADES PARA FAZER O BOTÃO ESTICAR E PARECER CENTRALIZADO --- */
+    display: block; /* Garante que o botão se comporte como um bloco */
+    width: 80%; /* Ocupa 80% da largura do contêiner pai */
+    max-width: 300px; /* Limite a largura máxima para não ficar gigante em telas muito largas */
+    margin: 0 auto; /* Centraliza horizontalmente o bloco */
+    /* --- FIM DAS PROPRIEDADES --- */
+
+    white-space: nowrap; /* Impede quebra de linha do texto do botão */
+    text-align: center;
+    /* Removido: margin: 0; pois margin: 0 auto; já o inclui */
+
+    /* Cores e sombras do #btnVoltarMenu do Modo Infinito */
+    background-color: #4CAF50; /* Verde */
+    box-shadow: 0 0 10px #4CAF50, inset 0 0 5px rgba(255, 255, 255, 0.5);
+}
+
+#tela-bom-trabalho button:hover {
+    background-color: #66bb6a; /* Verde mais claro no hover */
+    box-shadow: 0 0 20px #4CAF50, inset 0 0 8px rgba(255, 255, 255, 0.6);
+    transform: scale(1.05);
+}
+
+#aviso-escape {
+    position: absolute;
+    bottom: 25%;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #ffcc00;
+    font-size: clamp(16px, 3.5vw, 22px);
+    text-shadow: 2px 2px 4px #000;
+    z-index: 15;
+    text-align: center;
+    padding: 10px;
+    width: 80%;
+    max-width: 500px;
+    background-color: rgba(255, 100, 0, 0.3);
+    border: 2px solid #ffcc00;
+    border-radius: 5px;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out; 
+}
+
+/* NOVA SEÇÃO PARA A REAÇÃO DA MAELIS (MODIFICADA) */
+#maelis-reaction-container {
+    position: absolute;
+    top: 15px; /* Alinha verticalmente com os corações */
+    left: 1px; /* Inicialmente na mesma posição, ajustaremos com margem */
+    width: 95px; /* Tamanho inicial, ajuste conforme o tamanho dos corações */
+    height: 80px; /* Tamanho inicial, ajuste conforme o tamanho dos corações */
+    z-index: 100;
+    overflow: hidden;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    margin-left: 30px; /* Espaço entre os corações e a cabecinha (ajuste conforme o tamanho da fonte dos corações) */
+}
+
+#maelis-reaction-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; 
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+/* FIM NOVA SEÇÃO */
+
+
+#onda-display {
+    position: absolute;
+    top: 30px;
+    right: 15px;
+    color: #fff;
+    font-size: 20px;
+    z-index: 160;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+}
