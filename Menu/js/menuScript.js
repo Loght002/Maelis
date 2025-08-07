@@ -256,7 +256,7 @@ document.addEventListener('DOMContentLoaded', () => {
         telaRanking.style.display = 'flex';
         rankingList.innerHTML = `<p>${langData[settings.language].ranking_carregando}</p>`;
         try {
-            const response = await fetch('http://localhost:3000/get-ranking');
+            const response = await fetch('https://maelis-ranking-server.onrender.com/ranking');
             if (!response.ok) throw new Error('Network response was not ok');
             const rankingData = await response.json();
             if (rankingData.length === 0) {
@@ -264,8 +264,8 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 let rankingHTML = '<ol>';
                 rankingData.forEach((player, index) => {
-                    rankingHTML += `<li><span class="rank-nickname">${index + 1}. ${player.nickname}</span><span class="rank-score">${player.score}</span></li>`;
-                });
+                rankingHTML += `<li><span class="rank-nickname">${index + 1}. ${player.nome}</span><span class="rank-score">${player.pontuacao}</span></li>`;
+            });
                 rankingHTML += '</ol>';
                 rankingList.innerHTML = rankingHTML;
             }
