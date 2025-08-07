@@ -13,7 +13,7 @@ const port = process.env.PORT || 3000;
 
 // 4. Conectar ao Firebase
 // Certifique-se de que o arquivo serviceAccountKey.json está na mesma pasta
-const serviceAccount = require('./serviceAccountKey.json');
+const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
 
 // O URL do seu banco de dados Firebase
 // Substitua o placeholder pelo ID do seu projeto, que você encontra em Configurações do Projeto > Geral
