@@ -424,15 +424,17 @@ function gameOver() {
     async function enviarPontuacaoParaRanking(nickname, score) {
         try {
             // Lembre-se que o servidor local precisa estar rodando para isso funcionar.
-            const response = await fetch('http://localhost:3000/add-score', { 
+            // lembrar de tirar o nome e a pontuação
+
+            const response = await fetch('https://maelis-ranking-server.onrender.com/ranking', { 
                 method: 'POST', 
                 headers: { 'Content-Type': 'application/json' }, 
-                body: JSON.stringify({ nickname, score }) 
+                body: JSON.stringify({ nome: nickname, pontuacao: score }) 
             });
             if (response.ok) { 
                 console.log("Pontuação enviada com sucesso para o ranking!"); 
             } else { 
-                console.error("Falha ao enviar pontuação para o ranking."); 
+                console.error("Falha ao enviar pontuação para o rankings."); 
             }
         } catch (error) { 
             console.error("Erro de conexão com o servidor de ranking:", error); 
